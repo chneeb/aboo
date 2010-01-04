@@ -1,0 +1,166 @@
+// !$*UTF8*$!
+{
+	08FB7793FE84155DC02AAC07 /* Project object */ = {
+		activeBuildConfigurationName = Debug;
+		activeExecutable = 969D91DB10F23AA80071FD44 /* aboo */;
+		activeTarget = 8DD76F960486AA7600D96B5E /* aboo */;
+		addToTargets = (
+			8DD76F960486AA7600D96B5E /* aboo */,
+		);
+		codeSenseManager = 969D91E710F23AB10071FD44 /* Code sense */;
+		executables = (
+			969D91DB10F23AA80071FD44 /* aboo */,
+		);
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					495,
+					20,
+					48,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXConfiguration.PBXTargetDataSource.PBXTargetDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					473,
+					60,
+					20,
+					48,
+					43,
+					43,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXTargetDataSource_PrimaryAttribute,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 284310184;
+			PBXWorkspaceStateSaveDate = 284310184;
+		};
+		perUserProjectItems = {
+			969D92B510F240D40071FD44 /* PBXTextBookmark */ = 969D92B510F240D40071FD44 /* PBXTextBookmark */;
+			969D92B610F240D40071FD44 /* PBXTextBookmark */ = 969D92B610F240D40071FD44 /* PBXTextBookmark */;
+			969D92C110F242DA0071FD44 /* PBXTextBookmark */ = 969D92C110F242DA0071FD44 /* PBXTextBookmark */;
+		};
+		sourceControlManager = 969D91E610F23AB10071FD44 /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	08FB7796FE84155DC02AAC07 /* aboo.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {439, 6643}}";
+			sepNavSelRange = "{117, 0}";
+			sepNavVisRange = "{0, 435}";
+			sepNavWindowFrame = "{{583, 117}, {978, 786}}";
+		};
+	};
+	8DD76F960486AA7600D96B5E /* aboo */ = {
+		activeExec = 0;
+		executables = (
+			969D91DB10F23AA80071FD44 /* aboo */,
+		);
+	};
+	969D91DB10F23AA80071FD44 /* aboo */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		dataTipCustomDataFormattersEnabled = 1;
+		dataTipShowTypeColumn = 1;
+		dataTipSortType = 0;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = aboo;
+		savedGlobals = {
+		};
+		showTypeColumn = 0;
+		sourceDirectories = (
+		);
+	};
+	969D91E610F23AB10071FD44 /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+			repositoryNamesForRoots = {
+				"" = "";
+			};
+		};
+	};
+	969D91E710F23AB10071FD44 /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	969D91EE10F23BFB0071FD44 /* RegexKitLite.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {673, 2912}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 1378}";
+		};
+	};
+	969D92B510F240D40071FD44 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 969D91EE10F23BFB0071FD44 /* RegexKitLite.h */;
+		name = "RegexKitLite.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1378;
+		vrLoc = 0;
+	};
+	969D92B610F240D40071FD44 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 08FB7796FE84155DC02AAC07 /* aboo.m */;
+		name = "aboo.m: 4";
+		rLen = 0;
+		rLoc = 71;
+		rType = 0;
+		vrLen = 1098;
+		vrLoc = 289;
+	};
+	969D92C110F242DA0071FD44 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 08FB7796FE84155DC02AAC07 /* aboo.m */;
+		name = "aboo.m: 234";
+		rLen = 0;
+		rLoc = 6662;
+		rType = 0;
+		vrLen = 726;
+		vrLoc = 6412;
+	};
+}
