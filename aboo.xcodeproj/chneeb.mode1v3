@@ -295,7 +295,7 @@
 							<real>204</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>294 157 1048 842 0 0 1680 1028 </string>
+						<string>293 149 1048 842 0 0 1680 1028 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -325,11 +325,11 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>969584DC10F3A54D00978746</string>
+										<string>9695856110F3D07B00978746</string>
 										<key>history</key>
 										<array>
 											<string>969D92B510F240D40071FD44</string>
-											<string>969584D310F3A45800978746</string>
+											<string>9695855410F3CE9D00978746</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -343,7 +343,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {822, 598}}</string>
 								<key>RubberWindowFrame</key>
-								<string>294 157 1048 842 0 0 1680 1028 </string>
+								<string>293 149 1048 842 0 0 1680 1028 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -363,7 +363,7 @@
 								<key>Frame</key>
 								<string>{{0, 603}, {822, 198}}</string>
 								<key>RubberWindowFrame</key>
-								<string>294 157 1048 842 0 0 1680 1028 </string>
+								<string>293 149 1048 842 0 0 1680 1028 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -531,7 +531,7 @@
 		<string>/Users/chneeb/Source/aboo/aboo.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>294 157 1048 842 0 0 1680 1028 </string>
+	<string>293 149 1048 842 0 0 1680 1028 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>
