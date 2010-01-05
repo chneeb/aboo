@@ -21,9 +21,10 @@ void print_person(ABPerson *person);
 void print_person_vcf(ABPerson *person);
 void print_person_yml(ABPerson *person);
 void print_person_pine(ABPerson *person);
+void print_person_mutt(ABPerson *person);
 BOOL match_person(ABPerson *person, NSString *searchTerm);
-BOOL match_person_regex(ABPerson *person, const char *pattern);
-BOOL match_regex(const char *text, const char *pattern);
+BOOL match_person_regex(ABPerson *person, NSString *pattern);
+BOOL match_regex(NSString *text, NSString *pattern);
 void import_data(NSData *inputData);
 void update_data(NSData *inputData);
 ABPerson *find_person(ABPerson *person);
@@ -42,10 +43,11 @@ int main (int argc, const char * argv[]) {
 	BOOL  shouldOutputVcf   = NO;
 	BOOL  shouldOutputYml   = NO;
 	BOOL  shouldOutputPine  = NO;
+	BOOL  shouldOutputMutt  = NO;
 	BOOL  shouldImportVcf   = NO;
 	BOOL  shouldWriteBdays  = NO;
 	
-	while ((ch = getopt(argc, (char * const *) argv, "hs:r:vypib")) != -1)
+	while ((ch = getopt(argc, (char * const *) argv, "hs:r:vypmib")) != -1)
 	{
 		switch(ch)
 		{
@@ -69,6 +71,9 @@ int main (int argc, const char * argv[]) {
 					break;
 			case 'p':
 					shouldOutputPine = YES;
+					break;
+			case 'm':
+					shouldOutputMutt = YES;
 					break;
 			case 'i':
 					shouldImportVcf = YES;
@@ -115,7 +120,8 @@ int main (int argc, const char * argv[]) {
 		}
 		else if(shouldSearchRegex)
 		{
-			recordMatches = match_person_regex(person, optSearchRegex);
+			NSString *regex = [[NSString alloc] initWithUTF8String:optSearchRegex];
+			recordMatches = match_person_regex(person, regex);
 		}
 				
 		if(!(shouldSearchTerm || shouldSearchRegex) || recordMatches)
@@ -131,6 +137,10 @@ int main (int argc, const char * argv[]) {
 			else if(shouldOutputPine)
 			{
 				print_person_pine(person);
+			}
+			else if(shouldOutputMutt)
+			{
+				print_person_mutt(person);
 			}
 			else
 			{
@@ -204,11 +214,11 @@ BOOL match_person(ABPerson *person, NSString *searchTerm)
 	return recordMatches;
 }
 
-BOOL match_person_regex(ABPerson *person, const char *pattern)
+BOOL match_person_regex(ABPerson *person, NSString *pattern)
 {
-	const char *lastName  = [[person valueForProperty:kABLastNameProperty] UTF8String];
-	const char *firstName = [[person valueForProperty:kABFirstNameProperty] UTF8String];
-	const char *nickName  = [[person valueForProperty:kABNicknameProperty] UTF8String];
+	NSString *lastName  = [person valueForProperty:kABLastNameProperty];
+	NSString *firstName = [person valueForProperty:kABFirstNameProperty];
+	NSString *nickName  = [person valueForProperty:kABNicknameProperty];
 	
 	if(nickName != NULL && match_regex(nickName, pattern))
 	{
@@ -226,12 +236,9 @@ BOOL match_person_regex(ABPerson *person, const char *pattern)
 	return NO;
 }
 
-BOOL match_regex(const char *text, const char *pattern)
+BOOL match_regex(NSString *text, NSString *pattern)
 {
-	NSString *source = [[NSString alloc] initWithCString:text];
-	NSString *regex = [[NSString alloc] initWithCString:pattern];
-	
-	NSString *match = [source stringByMatching:regex];
+	NSString *match = [text stringByMatching:pattern];
 	
 	if(match == NULL)
 	{
@@ -315,6 +322,10 @@ void print_person_pine(ABPerson *person)
 		/* create eight character login string like: Christian Neeb -> neebchri
 		 * at least one character of the first name should be used if it exists
 		 */
+		/* FIXME: Use email name before @ instead
+		 * int index = [input rangeOfString:@"\@"].location;
+		 * NSString *cmd = [input substringToIndex:index]);
+		 */
 		usedAlias = [lastName lowercaseString];
 		if([usedAlias length] > 7 && firstName != nil)
 		{
@@ -340,7 +351,7 @@ void print_person_pine(ABPerson *person)
 	{
 		return; /* don't output a person without nickname or first name */
 	}
-
+	
 	formattedOutput = [formattedOutput stringByAppendingFormat:@"%@", usedAlias];
 
 	/* full name for pine addressbook */
@@ -370,6 +381,21 @@ void print_person_pine(ABPerson *person)
 	/* mail folder name for pine */
 	/* comment for pine addressbook */
 	
+	printf("%s\n", [formattedOutput UTF8String]);
+}
+
+void print_person_mutt(ABPerson *person)
+{
+	NSString *lastName  = [person valueForProperty:kABLastNameProperty];
+	NSString *firstName = [person valueForProperty:kABFirstNameProperty]; 
+	ABMultiValue *email = [person valueForProperty:kABEmailProperty];
+	NSString *primaryEmail = [email valueAtIndex:[email indexForIdentifier:[email primaryIdentifier]]];
+	
+	NSString *formattedOutput = [NSString stringWithFormat:@"%@\t%@ %@", primaryEmail, firstName, lastName];
+	
+	if(primaryEmail == nil)
+		return; /* don't output a person without mail address */
+
 	printf("%s\n", [formattedOutput UTF8String]);
 }
 
