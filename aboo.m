@@ -7,6 +7,7 @@
 
 void usage();
 void print_person(ABPerson *person);
+void print_person_phone(ABPerson *person);
 void print_person_vcf(ABPerson *person);
 void print_person_ics(ABPerson *person);
 void print_person_yml(ABPerson *person);
@@ -30,8 +31,9 @@ int main (int argc, const char * argv[]) {
 	BOOL  shouldOutputYml   = NO;
 	BOOL  shouldOutputMutt  = NO;
 	BOOL  shouldImportVcf   = NO;
-	
-	while ((ch = getopt(argc, (char * const *) argv, "hs:mvyb")) != -1)
+	BOOL  shouldOutputPhone = NO;
+    
+	while ((ch = getopt(argc, (char * const *) argv, "hfs:mvpyb")) != -1)
 	{
 		switch(ch)
 		{
@@ -51,6 +53,9 @@ int main (int argc, const char * argv[]) {
 			case 'y':
 					shouldOutputYml = YES;
 					break;
+            case 'p':
+                    shouldOutputPhone = YES;
+                    break;
 			case 'h':
 					usage();
 					break;
@@ -67,25 +72,28 @@ int main (int argc, const char * argv[]) {
 	NSString *regex = @"";
 	if(optSearchTerm != NULL)
 	{
-		regex = [[[NSString alloc] initWithUTF8String:optSearchTerm] stringByReplacingOccurrencesOfString:@" " withString:@""];
+		regex = [[[NSString alloc] initWithUTF8String:optSearchTerm] stringByReplacingOccurrencesOfString:@" " withString:@"\\s"];
 	}
-		
+    
 	if(shouldOutputYml) printf("--- # YAML 1.0\n");
 	if(shouldOutputMutt) printf("Search term: '%s'\n", [regex UTF8String]);
 	if(shouldOutputIcs) printf("BEGIN:VCALENDAR\nVERSION:2.0\nX-WR-CALNAME:Birthdays\nX-WR-CALDESC:created by aboo\nX-WR-TIMEZONE:Europe/Berlin\nCALSCALE:GREGORIAN\n");
 	
-	while(person = [enumerator nextObject])
+	while((person = [enumerator nextObject]))
 	{
 		BOOL recordMatches = NO;
-
-		if(shouldSearchTerm && match_person_regex(person, regex))
+		if (shouldSearchTerm && match_person_regex(person, regex))
 		{	
 			recordMatches = YES;
 		}
 				
 		if(!shouldSearchTerm || recordMatches)
 		{
-			if(shouldOutputVcf)
+            if (shouldOutputPhone)
+            {
+                print_person_phone(person);
+            }
+			else if(shouldOutputVcf)
 			{
 				print_person_vcf(person);
 			}
@@ -113,19 +121,27 @@ int main (int argc, const char * argv[]) {
 	[pool release];
     return 0;
 }
-
 BOOL match_person_regex(ABPerson *person, NSString *pattern)
 {
 	NSString *lastName  = [person valueForProperty:kABLastNameProperty];
 	NSString *firstName = [person valueForProperty:kABFirstNameProperty];
 	NSString *nickName  = [person valueForProperty:kABNicknameProperty];
-	
-	if(match_regex(nickName, pattern) || match_regex(lastName, pattern) || match_regex(firstName, pattern))
+    NSString *company = [person valueForProperty:kABOrganizationProperty];
+	ABMultiValue *email = [person valueForProperty:kABEmailProperty];
+	NSString *primaryEmail = [email valueAtIndex:[email indexForIdentifier:[email primaryIdentifier]]];
+    NSString *note      = [person valueForProperty:kABNoteProperty];
+    
+	if(match_regex(nickName, pattern)       || 
+       match_regex(lastName, pattern)       || 
+       match_regex(firstName, pattern)      || 
+       match_regex(primaryEmail, pattern)   || 
+       match_regex(company, pattern)        ||
+       match_regex(note, pattern))
 		return YES;
 	else
 		return NO;
 }
-
+            
 BOOL match_regex(NSString *text, NSString *pattern)
 {
 	NSRange range = NSMakeRange(0, [text length]);
@@ -136,6 +152,28 @@ BOOL match_regex(NSString *text, NSString *pattern)
 		return YES;
 	else
 		return NO;
+}
+
+void print_person_phone(ABPerson *person)
+{
+    NSString *lastName  = [person valueForProperty:kABLastNameProperty];
+	NSString *firstName = [person valueForProperty:kABFirstNameProperty]; 
+    NSString *company = [person valueForProperty:kABOrganizationProperty];
+    NSString *formattedOutput;
+    if (lastName != nil && firstName != nil)
+        formattedOutput = [[NSString alloc] initWithFormat:@"%@ %@", firstName, lastName];
+	else if (company != nil)
+        formattedOutput = [[NSString alloc] initWithFormat:@"%@", company];
+    else
+        formattedOutput = [[NSString alloc] initWithString:@"Unknown"];
+
+    ABMultiValue *phone = [person valueForProperty:kABPhoneProperty];
+    NSString *primaryPhone = [phone valueAtIndex:[phone indexForIdentifier:[phone primaryIdentifier]]];
+    if(primaryPhone != nil)
+	{
+        formattedOutput = [formattedOutput stringByAppendingFormat:@": %@", primaryPhone];
+        printf("%s\n", [formattedOutput UTF8String]);
+	}
 }
 
 void print_person_ics(ABPerson *person)
@@ -231,14 +269,21 @@ void print_person(ABPerson *person)
 {
 	NSString *lastName  = [person valueForProperty:kABLastNameProperty];
 	NSString *firstName = [person valueForProperty:kABFirstNameProperty]; 
+    NSString *company = [person valueForProperty:kABOrganizationProperty];
 	ABMultiValue *phone = [person valueForProperty:kABPhoneProperty];
 	ABMultiValue *email = [person valueForProperty:kABEmailProperty];
 	
 	NSString *primaryPhone = [phone valueAtIndex:[phone indexForIdentifier:[phone primaryIdentifier]]];
 	NSString *primaryEmail = [email valueAtIndex:[email indexForIdentifier:[email primaryIdentifier]]];
 	
-	NSString *formattedOutput = [[NSString alloc] initWithFormat:@"%@ %@", firstName, lastName];
-	
+    NSString *formattedOutput;
+    if (lastName != nil && firstName != nil)
+        formattedOutput = [[NSString alloc] initWithFormat:@"%@ %@", firstName, lastName];
+	else if (company != nil)
+        formattedOutput = [[NSString alloc] initWithFormat:@"%@", company];
+    else
+        formattedOutput = [[NSString alloc] initWithString:@"Unknown"];
+    
 	if(primaryEmail != nil)
 	{
 		formattedOutput = [formattedOutput stringByAppendingFormat:@" <%@>", primaryEmail];
@@ -255,6 +300,7 @@ void usage()
 {
 	printf("usage: %s [options]\n", "aboo");
 	printf(OPTION_FORMAT, "-s", "<search term>", "search for term in first-, last- and nickname");
+    printf(OPTION_FORMAT, "-p", "\t\t", "Phone number-only output");
 	printf(OPTION_FORMAT, "-v", "\t\t", "vCard 3.0 output");
 	printf(OPTION_FORMAT, "-y", "\t\t", "YAML 1.0 output");
 	printf(OPTION_FORMAT, "-b", "\t\t", "ics birthday calendar output");
